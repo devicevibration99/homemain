@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="tr">
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>MySomatra</title>
+<title>IMU Kontrol Paneli</title>
 <style>
   :root {
     --pad: 10px;
@@ -187,6 +187,14 @@
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
   .tag { font-variant-numeric: tabular-nums; font-weight: 700; }
 
+  /* Vibration buttons grid */
+  .vib-buttons-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 8px; }
+  .vib-btn { padding: 10px 8px; border-radius: 8px; border: var(--line-w) solid rgba(124,58,237,0.4); background: var(--card-bg); color: var(--text); font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.15s ease; backdrop-filter: blur(10px); }
+  .vib-btn:hover { background: rgba(124,58,237,0.25); border-color: rgba(124,58,237,0.6); transform: translateY(-1px); box-shadow: 0 2px 4px rgba(124,58,237,0.3); }
+  .vib-btn:active { transform: translateY(0); box-shadow: 0 1px 2px rgba(0,0,0,0.2) inset; }
+  .vib-btn.active { background: rgba(124,58,237,0.4); border-color: #7c3aed; color: #fff; box-shadow: 0 0 0 2px rgba(124,58,237,0.3); }
+  @media (max-width: 900px) { .vib-buttons-grid { grid-template-columns: repeat(3, 1fr); } }
+
 
   /* Side-by-side plot grid */
   .grid-plots { display:grid; grid-template-columns: 1fr; gap:12px; align-items:start; }
@@ -330,26 +338,26 @@
 <body>
 <div class="app">
   <aside class="sidebar">
-    <div class="brand"><span class="dot"></span> MySomatra</div>
+    <div class="brand"><span class="dot"></span> IMU Kontrol</div>
     <div class="nav">
-      <a class="active" href="#">🏠 Dashboard</a>
-      <a id="navDevices" href="#">📶 Devices</a>
+      <a class="active" href="#">🏠 Kontrol Paneli</a>
+      <a id="navDevices" href="#">📶 Cihazlar</a>
       <div class="settings-wrap">
-        <a id="navSettings" href="#">⚙️ Settings</a>
+        <a id="navSettings" href="#">⚙️ Ayarlar</a>
         <div id="settingsDropdown" class="settings-dropdown">
           <a class="item" href="#" data-panel="panelGPS">📍 GPS</a>
-          <a class="item" href="#" data-panel="panelSaveFolder">💾 Save to folder</a>
+          <a class="item" href="#" data-panel="panelSaveFolder">💾 Klasöre Kaydet</a>
         </div>
       </div>
     </div>
     <!-- Device controls moved from top bar -->
     <div class="panel" id="panelTopControls">
-      <div class="title">Device Controls</div>
+      <div class="title">Cihaz Kontrolleri</div>
       <div class="controls">
-        <button id="btnAdd" class="btn-primary">Add Device</button>
-        <button id="btnConnectTop" class="btn-outline">Connect</button>
+        <button id="btnAdd" class="btn-primary">Cihaz Ekle</button>
+        <button id="btnConnectTop" class="btn-outline">Bağlan</button>
         <div class="batt-wrap" id="top-batt" style="margin-left:auto">
-          <div class="batt-icon" id="top-batt-icon" title="Battery">
+          <div class="batt-icon" id="top-batt-icon" title="Batarya">
             <div class="batt-level" id="top-batt-level" style="width:0%"></div>
           </div>
           <span class="batt-pct" id="top-batt-pct">—</span>
@@ -357,16 +365,16 @@
       </div>
     </div>
     <div id="deviceList" class="panel" style="display:none">
-      <div class="title">Devices (<span id="sideDeviceCount">0</span>)</div>
-      <div class="small muted" id="sideDeviceHint">No devices connected.</div>
+      <div class="title">Cihazlar (<span id="sideDeviceCount">0</span>)</div>
+      <div class="small muted" id="sideDeviceHint">Bağlı cihaz yok.</div>
       <ul id="sideDeviceItems" style="list-style:none; padding-left:0; margin:6px 0 0 0"></ul>
     </div>
     <div id="panelDeviceLog" class="panel" style="margin-top:auto">
-      <div class="title">Device Log</div>
+      <div class="title">Cihaz Günlüğü</div>
       <div class="controls" style="margin-bottom:6px">
-        <button id="sbSaveCsv">Save CSV</button>
-        <button id="sbClearLog">Clear Log</button>
-        <button id="sbDisconnect" class="btn-outline">Disconnect</button>
+        <button id="sbSaveCsv">CSV Kaydet</button>
+        <button id="sbClearLog">Günlüğü Temizle</button>
+        <button id="sbDisconnect" class="btn-outline">Bağlantıyı Kes</button>
       </div>
       <div class="console global-console"></div>
     </div>
@@ -374,35 +382,35 @@
     <div id="panelGPS" class="panel">
       <div class="title">GPS</div>
       <div class="grid2">
-        <div class="field"><span>Status</span><span id="sb-gps-fix" class="tag">—</span></div>
-        <div class="field"><span>Satellites</span><span id="sb-gps-sats" class="tag">—</span></div>
+        <div class="field"><span>Durum</span><span id="sb-gps-fix" class="tag">—</span></div>
+        <div class="field"><span>Uydular</span><span id="sb-gps-sats" class="tag">—</span></div>
       </div>
       <div class="grid2" style="margin-top:6px">
-        <div class="field"><span>Lat</span><span id="sb-gps-lat" class="tag">—</span></div>
-        <div class="field"><span>Lon</span><span id="sb-gps-lon" class="tag">—</span></div>
+        <div class="field"><span>Enlem</span><span id="sb-gps-lat" class="tag">—</span></div>
+        <div class="field"><span>Boylam</span><span id="sb-gps-lon" class="tag">—</span></div>
       </div>
       <div class="grid2" style="margin-top:6px">
-        <div class="field"><span>Alt (m)</span><span id="sb-gps-alt" class="tag">—</span></div>
+        <div class="field"><span>Yükseklik (m)</span><span id="sb-gps-alt" class="tag">—</span></div>
         <div class="field"><span>HDOP</span><span id="sb-gps-hdop" class="tag">—</span></div>
       </div>
       <div class="grid2" style="margin-top:6px">
-        <div class="field"><span>Speed</span><span id="sb-gps-spd" class="tag">—</span></div>
-        <div class="field"><span>Course</span><span id="sb-gps-cog" class="tag">—</span></div>
+        <div class="field"><span>Hız</span><span id="sb-gps-spd" class="tag">—</span></div>
+        <div class="field"><span>Yön</span><span id="sb-gps-cog" class="tag">—</span></div>
       </div>
     </div>
 
     <!-- Save to folder moved from device panel -->
     <div id="panelSaveFolder" class="panel">
-      <div class="title">Save to folder</div>
+      <div class="title">Klasöre Kaydet</div>
       <div class="controls">
-        <button class="btnChooseFolder">Choose Folder</button>
-        <span class="muted">Folder: <span class="folderName">–</span></span>
+        <button class="btnChooseFolder">Klasör Seç</button>
+        <span class="muted">Klasör: <span class="folderName">–</span></span>
       </div>
       <div class="grid2" style="margin-top:6px">
-        <div class="field"><span>Base</span><input class="baseName" type="text" value="Log"></div>
+        <div class="field"><span>Temel</span><input class="baseName" type="text" value="Log"></div>
         <div class="field"><span>#</span><input class="counter" type="number" value="1"></div>
       </div>
-      <div class="muted small" style="margin-top:4px">Preview: <code class="previewName">Log_1.csv</code></div>
+      <div class="muted small" style="margin-top:4px">Önizleme: <code class="previewName">Log_1.csv</code></div>
     </div>
   </aside>
   <div class="resizer" id="resizer"></div>
@@ -505,7 +513,7 @@ function makePanelsCollapsible(root){
 
     const sum = document.createElement('summary');
     sum.className = 'title';
-    sum.textContent = title ? title.textContent : 'Section';
+    sum.textContent = title ? title.textContent : 'Bölüm';
 
     title?.remove();
 
@@ -673,8 +681,25 @@ class DeviceCard {
     this.btnStartPWM.onclick   = ()=> this.sendLine(`PWM,${this.inFreq.value},${this.inDuty.value}`);
     this.btnStopPWM.onclick    = ()=> { this.stopFM(); this.sendLine('STOP'); };
 
-    this.btnTrigOn.onclick     = ()=>{ this.triggerEnabled=true; this.lastEdgeState=null; this.log('Angle trigger ENABLED'); };
-    this.btnTrigOff.onclick    = ()=>{ this.triggerEnabled=false; this.lastEdgeState=null; this.log('Angle trigger DISABLED'); };
+    // Predefined vibration buttons
+    this.root.querySelectorAll('.vib-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const freq = btn.getAttribute('data-freq');
+        const duty = this.inDuty.value || 50;
+        // Update the frequency input field
+        if (this.inFreq) this.inFreq.value = freq;
+        // Send PWM command
+        this.sendLine(`PWM,${freq},${duty}`);
+        // Visual feedback - remove active from all, add to clicked
+        this.root.querySelectorAll('.vib-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        // Remove active state after a brief moment for visual feedback
+        setTimeout(() => btn.classList.remove('active'), 300);
+      });
+    });
+
+    this.btnTrigOn.onclick     = ()=>{ this.triggerEnabled=true; this.lastEdgeState=null; this.log('Açı tetikleyici ETKİNLEŞTİRİLDİ'); };
+    this.btnTrigOff.onclick    = ()=>{ this.triggerEnabled=false; this.lastEdgeState=null; this.log('Açı tetikleyici DEVRE DIŞI BIRAKILDI'); };
 
     if (this.btnChooseFolder) this.btnChooseFolder.onclick = ()=> this.chooseFolder();
 
@@ -730,18 +755,18 @@ class DeviceCard {
     return `
       <div class="dev-head">
         <div class="dev-title">System_V3_Actuator2</div>
-        <span class="muted">Pitch: <span class="tag pitchval">–</span> °</span>
+        <span class="muted">Açı: <span class="tag pitchval">–</span> °</span>
         <span class="muted">• IMU: <span class="tag imu-hz">—</span> Hz</span>
         <span class="muted">• BLE: <span class="tag ble-hz">—</span> Hz</span>
         <span class="muted">• PRINT_HZ=<span class="tag print-hz">—</span></span>
-        <span class="muted">• Battery:
+        <span class="muted">• Batarya:
           <span class="tag batt-v">—</span> V
           (<span class="batt-p">—</span>%)
         </span>
 
 
         
-        <span class="pill status">Disconnected</span>
+        <span class="pill status">Bağlantı Kesildi</span>
       </div>
 
       
@@ -753,7 +778,7 @@ class DeviceCard {
           <details class="plot-block" open>
             <summary class="plot-title">
               <span class="plot-caret">▸</span>
-              IMU plot
+              IMU Grafiği
             </summary>
             <canvas class="plot-time" width="700" height="240"></canvas>
           </details>
@@ -762,11 +787,11 @@ class DeviceCard {
 
           <!-- IMU Control -->
           <div class="panel" style="margin-top:8px">
-            <div class="title">IMU Control</div>
+            <div class="title">IMU Kontrolü</div>
             <div class="controls">
-              <button class="btnStartStream">Start Stream</button>
-              <button class="btnStopStream">Stop Stream</button>
-              <button class="btnCal3s">Calibrate (3s zero)</button>
+              <button class="btnStartStream">Akışı Başlat</button>
+              <button class="btnStopStream">Akışı Durdur</button>
+              <button class="btnCal3s">Kalibre Et (3s sıfır)</button>
             </div>
           </div>
 
@@ -775,13 +800,13 @@ class DeviceCard {
           <details class="plot-block">
             <summary class="plot-title">
               <span class="plot-caret">▸</span>
-              Plot options
+              Grafik Seçenekleri
             </summary>
             <div class="stack">
-              <label class="row"><input type="checkbox" class="chkPause"/> Pause plot</label>
-              <label class="row"><input type="checkbox" class="chkAutoscale" checked/> Autoscale Y</label>
-              <div class="field"><span>Fixed range (±°)</span><input type="number" class="inFixedRange" value="90"></div>
-              <label class="row"><input type="checkbox" class="chkThresh" checked/> Show thresholds</label>
+              <label class="row"><input type="checkbox" class="chkPause"/> Grafiği Duraklat</label>
+              <label class="row"><input type="checkbox" class="chkAutoscale" checked/> Y Otomatik Ölçekle</label>
+              <div class="field"><span>Sabit Aralık (±°)</span><input type="number" class="inFixedRange" value="90"></div>
+              <label class="row"><input type="checkbox" class="chkThresh" checked/> Eşikleri Göster</label>
             </div>
           </details>
         </div>
@@ -794,82 +819,110 @@ class DeviceCard {
               PWM
             </summary>
             <div class="grid2">
-              <div class="field"><span>Freq (Hz)</span><input type="number" class="inFreq" value="100"></div>
-              <div class="field"><span>Duty (%)</span><input type="number" class="inDuty" value="50"></div>
+              <div class="field"><span>Frekans (Hz)</span><input type="number" class="inFreq" value="100"></div>
+              <div class="field"><span>Görev Döngüsü (%)</span><input type="number" class="inDuty" value="50"></div>
             </div>
             <div class="controls" style="margin-top:6px">
-              <button class="btnStartPWM">Start</button>
-              <button class="btnStopPWM">Stop</button>
+              <button class="btnStartPWM">Başlat</button>
+              <button class="btnStopPWM">Durdur</button>
+            </div>
+          </details>
+
+          <details class="plot-block" open>
+            <summary class="plot-title">
+              <span class="plot-caret">▸</span>
+              Önceden Tanımlı Titreşim
+            </summary>
+            <div class="vib-buttons-grid">
+              <button class="vib-btn" data-freq="10">10 Hz</button>
+              <button class="vib-btn" data-freq="15">15 Hz</button>
+              <button class="vib-btn" data-freq="20">20 Hz</button>
+              <button class="vib-btn" data-freq="25">25 Hz</button>
+              <button class="vib-btn" data-freq="30">30 Hz</button>
+              <button class="vib-btn" data-freq="35">35 Hz</button>
+              <button class="vib-btn" data-freq="40">40 Hz</button>
+              <button class="vib-btn" data-freq="45">45 Hz</button>
+              <button class="vib-btn" data-freq="50">50 Hz</button>
+              <button class="vib-btn" data-freq="55">55 Hz</button>
+              <button class="vib-btn" data-freq="60">60 Hz</button>
+              <button class="vib-btn" data-freq="65">65 Hz</button>
+              <button class="vib-btn" data-freq="70">70 Hz</button>
+              <button class="vib-btn" data-freq="75">75 Hz</button>
+              <button class="vib-btn" data-freq="80">80 Hz</button>
+              <button class="vib-btn" data-freq="85">85 Hz</button>
+              <button class="vib-btn" data-freq="90">90 Hz</button>
+              <button class="vib-btn" data-freq="95">95 Hz</button>
+              <button class="vib-btn" data-freq="100">100 Hz</button>
             </div>
           </details>
 
           <details class="plot-block">
             <summary class="plot-title">
               <span class="plot-caret">▸</span>
-              Random Frequency Modulation
+              Rastgele Frekans Modülasyonu
             </summary>
             <div class="grid2">
-              <div class="field"><span>Min Freq (Hz)</span><input type="number" class="inMinFreq" value="50"></div>
-              <div class="field"><span>Max Freq (Hz)</span><input type="number" class="inMaxFreq" value="150"></div>
+              <div class="field"><span>Min Frekans (Hz)</span><input type="number" class="inMinFreq" value="50"></div>
+              <div class="field"><span>Max Frekans (Hz)</span><input type="number" class="inMaxFreq" value="150"></div>
             </div>
             <div class="grid2" style="margin-top:6px">
-              <div class="field"><span>Interval (ms)</span><input type="number" class="inFMInterval" value="250"></div>
+              <div class="field"><span>Aralık (ms)</span><input type="number" class="inFMInterval" value="250"></div>
               <div></div>
             </div>
             <div class="controls" style="margin-top:6px">
-              <button class="btnFMOn">FM Start</button>
-              <button class="btnFMOff btn-outline">FM Stop</button>
+              <button class="btnFMOn">FM Başlat</button>
+              <button class="btnFMOff btn-outline">FM Durdur</button>
             </div>
           </details>
 
           <details class="plot-block">
             <summary class="plot-title">
               <span class="plot-caret">▸</span>
-              Angle → Frequency Map
+              Açı → Frekans Eşlemesi
             </summary>
             <div class="grid2">
-              <div class="field"><span>Angle min (°)</span><input type="number" class="inAngMin" value="30"></div>
-              <div class="field"><span>Angle max (°)</span><input type="number" class="inAngMax" value="50"></div>
+              <div class="field"><span>Min Açı (°)</span><input type="number" class="inAngMin" value="30"></div>
+              <div class="field"><span>Max Açı (°)</span><input type="number" class="inAngMax" value="50"></div>
             </div>
             <div class="grid2" style="margin-top:6px">
-              <div class="field"><span>Freq min (Hz)</span><input type="number" class="inMapFmin" value="100"></div>
-              <div class="field"><span>Freq max (Hz)</span><input type="number" class="inMapFmax" value="200"></div>
+              <div class="field"><span>Min Frekans (Hz)</span><input type="number" class="inMapFmin" value="100"></div>
+              <div class="field"><span>Max Frekans (Hz)</span><input type="number" class="inMapFmax" value="200"></div>
             </div>
             <div class="grid2" style="margin-top:6px">
-              <div class="field"><span>Update (ms)</span><input type="number" class="inMapPeriod" value="50"></div>
-              <div class="field"><span>Deadband (Hz)</span><input type="number" class="inMapDeadbn" value="2"></div>
+              <div class="field"><span>Güncelleme (ms)</span><input type="number" class="inMapPeriod" value="50"></div>
+              <div class="field"><span>Ölü Bant (Hz)</span><input type="number" class="inMapDeadbn" value="2"></div>
             </div>
             <div class="grid2" style="margin-top:6px">
-              <label class="row"><input type="checkbox" class="chkMapGuide" checked> Show window on plot</label>
+              <label class="row"><input type="checkbox" class="chkMapGuide" checked> Grafikte pencereyi göster</label>
               <div></div>
             </div>
             <div class="controls" style="margin-top:6px">
-              <button class="btnMapOn">Map Start</button>
-              <button class="btnMapOff btn-outline">Map Stop</button>
+              <button class="btnMapOn">Eşleme Başlat</button>
+              <button class="btnMapOff btn-outline">Eşleme Durdur</button>
             </div>
-            <div class="muted small">Maps angle linearly: 30°→100 Hz, 50°→200 Hz (and vice versa). Stops PWM outside angle window.</div>
+            <div class="muted small">Açıyı doğrusal olarak eşler: 30°→100 Hz, 50°→200 Hz (ve tersi). Açı penceresi dışında PWM'yi durdurur.</div>
           </details>
 
           <details class="plot-block">
             <summary class="plot-title">
               <span class="plot-caret">▸</span>
-              Angle Trigger (Hysteresis)
+              Açı Tetikleyici (Histerezis)
             </summary>
             <div class="stack">
               <div class="controls">
-                <button class="btnTrigOn">Enable Trigger</button>
-                <button class="btnTrigOff">Disable Trigger</button>
+                <button class="btnTrigOn">Tetikleyiciyi Etkinleştir</button>
+                <button class="btnTrigOff">Tetikleyiciyi Devre Dışı Bırak</button>
               </div>
               <div class="field">
-                <span>Direction</span>
+                <span>Yön</span>
                 <select class="selDir">
-                  <option value="pos">Positive (↑)</option>
-                  <option value="neg">Negative (↓)</option>
+                  <option value="pos">Pozitif (↑)</option>
+                  <option value="neg">Negatif (↓)</option>
                 </select>
               </div>
               <div class="grid2">
-                <div class="field"><span>Start Th (°)</span><input type="number" class="inStartTh" value="30"></div>
-                <div class="field"><span>Stop Th (°)</span><input type="number" class="inStopTh" value="20"></div>
+                <div class="field"><span>Başlangıç Eşiği (°)</span><input type="number" class="inStartTh" value="30"></div>
+                <div class="field"><span>Durdurma Eşiği (°)</span><input type="number" class="inStopTh" value="20"></div>
               </div>
             </div>
           </details>
@@ -891,8 +944,13 @@ class DeviceCard {
   }
   setStatus(s){ 
     this.statusEl.textContent = s; 
-    // Apply CSS class for styling
-    const className = s.replace('…', '').replace(/\s+/g, '');
+    // Apply CSS class for styling - map Turkish to English class names
+    let className = s;
+    if (s === 'Bağlandı') className = 'Connected';
+    else if (s === 'Bağlanıyor…') className = 'Connecting';
+    else if (s === 'İstek gönderiliyor…') className = 'Requesting';
+    else if (s === 'Bağlantı Kesildi') className = 'Disconnected';
+    else className = s.replace('…', '').replace(/\s+/g, '');
     this.statusEl.className = 'pill status ' + className;
   }
 
@@ -922,27 +980,27 @@ class DeviceCard {
 
   async chooseFolder(){
     if (!('showDirectoryPicker' in window)){
-      alert("Folder saving requires Chrome/Edge desktop.");
+      alert("Klasöre kaydetme Chrome/Edge masaüstü sürümü gerektirir.");
       return;
     }
     try{
       this.dirHandle = await window.showDirectoryPicker({ mode:'readwrite' });
-      this.folderNameEl.textContent = this.dirHandle.name || 'selected';
-      this.log('Folder selected: ' + this.dirHandle.name);
+      this.folderNameEl.textContent = this.dirHandle.name || 'seçildi';
+      this.log('Klasör seçildi: ' + this.dirHandle.name);
     }catch(e){
-      if (e && e.name === 'AbortError'){ this.log('Folder select canceled.'); return; }
-      this.log('Folder select error: ' + e);
+      if (e && e.name === 'AbortError'){ this.log('Klasör seçimi iptal edildi.'); return; }
+      this.log('Klasör seçim hatası: ' + e);
     }
   }
 
   /* ---------- BLE ---------- */
   async connect(){
-    if (!('bluetooth' in navigator)){ alert('This browser does not support Web Bluetooth.'); return; }
-    if (this.server?.connected){ this.log('Already connected'); return; }
+    if (!('bluetooth' in navigator)){ alert('Bu tarayıcı Web Bluetooth\'u desteklemiyor.'); return; }
+    if (this.server?.connected){ this.log('Zaten bağlı'); return; }
     if (this.connecting) return;
     this.connecting = true;
     try{
-      this.setStatus('Requesting…');
+      this.setStatus('İstek gönderiliyor…');
       const device = await navigator.bluetooth.requestDevice({
         filters: [
           { services: [NUS_SERVICE] },
@@ -953,7 +1011,7 @@ class DeviceCard {
       this.device = device;
       this.device.addEventListener('gattserverdisconnected', ()=> this.onDisconnected());
       this.titleEl.textContent = device.name || this.titleEl.textContent;
-      this.setStatus('Connecting…');
+      this.setStatus('Bağlanıyor…');
       this.server  = await device.gatt.connect();
       this.service = await this.server.getPrimaryService(NUS_SERVICE);
       this.txChar  = await this.service.getCharacteristic(NUS_TX);
@@ -967,12 +1025,12 @@ class DeviceCard {
       }
       this.txChar.addEventListener('characteristicvaluechanged', this._onNotify);
 
-      this.setStatus('Connected');
-      this.log('Connected to ' + (device.name || 'ESP32-C3'));
+      this.setStatus('Bağlandı');
+      this.log((device.name || 'ESP32-C3') + ' cihazına bağlandı');
       if (typeof refreshDeviceList === 'function') refreshDeviceList();
       } catch(e) {
-        this.setStatus('Disconnected');
-        this.log('Connect error: ' + e);
+        this.setStatus('Bağlantı Kesildi');
+        this.log('Bağlantı hatası: ' + e);
       } finally {
         this.connecting = false;
       }
@@ -990,24 +1048,24 @@ class DeviceCard {
       }
       if (this.device?.gatt?.connected) this.device.gatt.disconnect();
     } catch(e){
-      this.log('Disconnect error: ' + e);
+      this.log('Bağlantı kesme hatası: ' + e);
     } finally{
       this.txChar=this.rxChar=this.service=this.server=null;
-      this.setStatus('Disconnected');
-      this.log('Disconnected.');
+      this.setStatus('Bağlantı Kesildi');
+      this.log('Bağlantı kesildi.');
       if (typeof refreshDeviceList === 'function') refreshDeviceList();
     }
   }
-  onDisconnected(){ this.setStatus('Disconnected'); this.txChar=this.rxChar=this.service=this.server=null; this.log('Disconnected.'); }
+  onDisconnected(){ this.setStatus('Bağlantı Kesildi'); this.txChar=this.rxChar=this.service=this.server=null; this.log('Bağlantı kesildi.'); }
 
   async sendLine(s){
-    if (!this.rxChar){ this.log('Not connected'); return; }
+    if (!this.rxChar){ this.log('Bağlı değil'); return; }
     const data = new TextEncoder().encode(s.endsWith('\n')?s:(s+'\n'));
     try{
       if ('writeValueWithoutResponse' in this.rxChar) await this.rxChar.writeValueWithoutResponse(data);
       else await this.rxChar.writeValue(data);
       this.log('> ' + s);
-    }catch(e){ this.log('Write error: ' + e); }
+    }catch(e){ this.log('Yazma hatası: ' + e); }
   }
 
 
@@ -1076,7 +1134,7 @@ class DeviceCard {
           const kn  = parseFloat(parts[7] || 'NaN');
           const cog = parseFloat(parts[8] || 'NaN');
 
-          if (this.gpsFixEl)  this.gpsFixEl.textContent  = fx ? 'FIX' : 'NOFIX';
+          if (this.gpsFixEl)  this.gpsFixEl.textContent  = fx ? 'SABİT' : 'SABİT DEĞİL';
           if (this.gpsSatsEl) this.gpsSatsEl.textContent = Number.isFinite(sts) ? String(sts) : '—';
           if (this.gpsHdopEl) this.gpsHdopEl.textContent = Number.isFinite(hd)  ? hd.toFixed(1) : '—';
 
@@ -1094,7 +1152,7 @@ class DeviceCard {
 
           // Update sidebar GPS
           const g = (id, text)=>{ const el=document.getElementById(id); if(el) el.textContent = text; };
-          g('sb-gps-fix',  fx ? 'FIX' : 'NOFIX');
+          g('sb-gps-fix',  fx ? 'SABİT' : 'SABİT DEĞİL');
           g('sb-gps-sats', Number.isFinite(sts)? String(sts): '—');
           g('sb-gps-lat',  Number.isFinite(lat)? lat.toFixed(6): '—');
           g('sb-gps-lon',  Number.isFinite(lon)? lon.toFixed(6): '—');
@@ -1234,9 +1292,9 @@ class DeviceCard {
       ctx.font = '10px system-ui';
       ctx.textAlign = 'right';
       ctx.textBaseline = 'bottom';
-      ctx.fillText(dir==='pos' ? 'Start (↑)' : 'Start (↓)', R - 2, yA - 2);
+      ctx.fillText(dir==='pos' ? 'Başlangıç (↑)' : 'Başlangıç (↓)', R - 2, yA - 2);
       ctx.textBaseline = 'top';
-      ctx.fillText('Stop', R - 2, yB + 2);
+      ctx.fillText('Durdur', R - 2, yB + 2);
       ctx.restore();
     }
 
@@ -1261,9 +1319,9 @@ class DeviceCard {
       ctx.font = '10px system-ui';
       ctx.textAlign = 'right';
       ctx.textBaseline = 'bottom';
-      ctx.fillText('Angle max', R - 2, yA - 2);
+      ctx.fillText('Maks Açı', R - 2, yA - 2);
       ctx.textBaseline = 'top';
-      ctx.fillText('Angle min', R - 2, yB + 2);
+      ctx.fillText('Min Açı', R - 2, yB + 2);
       ctx.restore();
     }
 
@@ -1338,12 +1396,12 @@ class DeviceCard {
     ctx.font = '12px system-ui';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'alphabetic';
-    ctx.fillText('Sample index (n)', (w-10 + 40)/2, h - 4);
+    ctx.fillText('Örnek indeksi (n)', (w-10 + 40)/2, h - 4);
     ctx.translate(14, (h-20 + 10)/2);
     ctx.rotate(-Math.PI/2);
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    ctx.fillText('Pitch angle (°)', 0, 0);
+    ctx.fillText('Açı (°)', 0, 0);
     ctx.restore();
   }
 
@@ -1351,12 +1409,12 @@ class DeviceCard {
 
   /* ---------- CSV ---------- */
   async saveCsv(){
-    if (!this.pitchBuf.length){ this.log('Nothing to save.'); return; }
+    if (!this.pitchBuf.length){ this.log('Kaydedilecek veri yok.'); return; }
     const onSet = this.xOn;
     const startIdx = this.sampleIndex - this.pitchBuf.length + 1;
     const t0 = this.timeBuf[0];
 
-    let csv='timestamp_s,t_rel_s,sample_index,pitch_deg,flag\n';
+    let csv='zaman_damgasi_s,iliskisel_zaman_s,ornek_indeksi,aci_derece,bayrak\n';
     for (let i=0;i<this.pitchBuf.length;i++){
       const t_abs=this.timeBuf[i];
       const t_rel=t_abs - t0;
@@ -1377,28 +1435,28 @@ class DeviceCard {
           const w = await f.createWritable();
           await w.write(blob);
           await w.close();
-          this.log(`Saved ${this.pitchBuf.length} samples to ${this.dirHandle.name}/${filename}`);
+          this.log(`${this.pitchBuf.length} örnek ${this.dirHandle.name}/${filename} dosyasına kaydedildi`);
           this.bumpCounter();
           return;
         }
-      }catch(e){ this.log('Folder save error: '+e+' — falling back.'); }
+      }catch(e){ this.log('Klasöre kaydetme hatası: '+e+' — alternatif yönteme geçiliyor.'); }
     }
 
     if ('showSaveFilePicker' in window){
       try{
         const handle = await window.showSaveFilePicker({
           suggestedName: filename,
-          types: [{ description: 'CSV file', accept: {'text/csv':['.csv']} }]
+          types: [{ description: 'CSV dosyası', accept: {'text/csv':['.csv']} }]
         });
         const w = await handle.createWritable();
         await w.write(blob);
         await w.close();
-        this.log('Saved ' + (handle.name || filename));
+        this.log((handle.name || filename) + ' kaydedildi');
         this.bumpCounter();
         return;
       }catch(e){
-        if (e && e.name==='AbortError'){ this.log('Save canceled.'); return; }
-        this.log('Save As error: '+e+' — using download fallback.');
+        if (e && e.name==='AbortError'){ this.log('Kaydetme iptal edildi.'); return; }
+        this.log('Farklı kaydet hatası: '+e+' — indirme yöntemi kullanılıyor.');
       }
     }
 
@@ -1408,7 +1466,7 @@ class DeviceCard {
     document.body.appendChild(a); a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    this.log('Saved '+filename+' (download fallback)');
+    this.log(filename+' kaydedildi (indirme yöntemi)');
     this.bumpCounter();
   }
 
@@ -1449,20 +1507,20 @@ class DeviceCard {
     this.setFMPeriodFromInput();
 
     this.fmEnabled = true;
-    this.log(`Random FM ON (${minF}–${maxF} Hz, ~${this.fmPeriodMs} ms step)`);
+    this.log(`Rastgele FM AÇIK (${minF}–${maxF} Hz, ~${this.fmPeriodMs} ms adım)`);
     this.fmTimer = setInterval(()=> this.fmTick(), this.fmPeriodMs);
   }
 
   stopFM(){
     if (!this.fmEnabled && !this.fmTimer) {
       if (this.rxChar) this.sendLine('STOP');
-      this.log('Random FM OFF');
+      this.log('Rastgele FM KAPALI');
       return;
     }
     this.fmEnabled = false;
     if (this.fmTimer){ clearInterval(this.fmTimer); this.fmTimer = null; }
     if (this.rxChar) this.sendLine('STOP');
-    this.log('Random FM OFF (PWM STOP)');
+    this.log('Rastgele FM KAPALI (PWM DURDURULDU)');
   }
 
   /* === Angle→Frequency Map === */
@@ -1497,21 +1555,21 @@ class DeviceCard {
 
     this.angleMapEnabled = true;
     this.mapLastHz = null;
-    this.log(`Angle→Freq Map ON (${amin}–${amax}° → ${fmin}–${fmax} Hz, ${this.mapPeriodMs} ms, deadband ${this.mapDeadbandHz} Hz)`);
+    this.log(`Açı→Frekans Eşlemesi AÇIK (${amin}–${amax}° → ${fmin}–${fmax} Hz, ${this.mapPeriodMs} ms, ölü bant ${this.mapDeadbandHz} Hz)`);
     this.mapTimer = setInterval(()=> this.angleMapTick(), this.mapPeriodMs);
   }
 
   stopAngleMap(){
     if (!this.angleMapEnabled && !this.mapTimer){
       if (this.rxChar) this.sendLine('STOP');
-      this.log('Angle→Freq Map OFF');
+      this.log('Açı→Frekans Eşlemesi KAPALI');
       return;
     }
     this.angleMapEnabled = false;
     if (this.mapTimer){ clearInterval(this.mapTimer); this.mapTimer = null; }
     if (this.rxChar) this.sendLine('STOP');
     this.mapLastHz = null;
-       this.log('Angle→Freq Map OFF (PWM STOP)');
+       this.log('Açı→Frekans Eşlemesi KAPALI (PWM DURDURULDU)');
   }
 
   restartAngleMapTimer(){
@@ -1611,7 +1669,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     for (const c of _cards){
       const li = document.createElement('li');
       li.style.margin = '2px 0';
-      const name = (c && c.titleEl && c.titleEl.textContent) ? c.titleEl.textContent : 'Device';
+      const name = (c && c.titleEl && c.titleEl.textContent) ? c.titleEl.textContent : 'Cihaz';
       li.textContent = name;
       sideItems.appendChild(li);
     }
