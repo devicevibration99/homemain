@@ -196,13 +196,8 @@
   .act-bars .bar { height:100%; width:0%; background:#7c3aed; transition: width .2s ease; }
   .act-bars .pct { width:42px; text-align:right; font-variant-numeric: tabular-nums; font-size:.8rem; color:var(--muted); }
 
-  /* Gait cycle canvas + caption */
-  .gait-wrap { margin-top:8px }
-  .gait-head { display:flex; align-items:center; gap:8px; margin:4px 2px }
-  .gait-metrics { color:var(--muted); font-size:.85rem }
-
   /* Side-by-side plot grid */
-  .grid-plots { display:grid; grid-template-columns: 1fr 1fr; gap:12px; align-items:start; }
+  .grid-plots { display:grid; grid-template-columns: 1fr; gap:12px; align-items:start; }
 
   /* Gait wheel card (unused now, CSS kept harmlessly) */
   .gait-card { border:var(--line-w) solid var(--line); border-radius: 12px; padding:8px; background:var(--card-bg); margin-top:8px; display:grid; grid-template-columns: 84px 1fr; gap:10px; align-items:center; backdrop-filter: blur(10px); }
@@ -210,19 +205,9 @@
   .gait-metric { font-size:.9rem; color:var(--text-secondary); }
   .gait-sub { color:var(--muted); font-size:.85rem; }
 
-  /* Overview: map + calendar + tasks + activity */
-  .overview-grid { display:grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap:10px; align-items:stretch; }
-  #overviewMap { width:100%; height:320px; margin:0; border:var(--line-w) solid var(--line); border-radius:12px; overflow:hidden; }
-  .calendar-box { width:100%; border:var(--line-w) solid var(--line); border-radius:12px; padding:6px; background:var(--card-bg); backdrop-filter: blur(10px); display:flex; align-items:center; justify-content:center; height:320px; position:relative; margin:0; }
-  .activity-box { width:100%; border:var(--line-w) solid var(--line); border-radius:12px; padding:16px; background:linear-gradient(180deg, rgba(124,58,237,0.2) 0%, rgba(124,58,237,0.15) 100%); display:flex; flex-direction:column; gap:12px; height:320px; box-shadow: inset 0 0 0 1px rgba(124,58,237,0.25); backdrop-filter: blur(10px); }
-  .task-box { width:100%; border:var(--line-w) solid var(--line); border-radius:12px; padding:14px; background:#7c3aed; display:flex; flex-direction:column; height:320px; }
-  .task-box .title { color:#fff; font-weight:700; font-size:1.1rem; margin-bottom:12px; }
-  .task-list { display:flex; flex-direction:column; gap:8px; overflow-y:auto; flex:1; }
-  .task-item { background:rgba(255,255,255,0.15); border-radius:8px; padding:10px 12px; color:#fff; font-size:0.95rem; display:flex; align-items:center; gap:10px; cursor:pointer; transition: all 0.2s ease; user-select: none; }
-  .task-item:hover { background:rgba(255,255,255,0.25); transform: translateX(2px); }
-  .task-item::before { content:'○'; font-size:1.2rem; transition: all 0.2s ease; }
-  .task-item.completed { opacity:0.6; text-decoration: line-through; }
-  .task-item.completed::before { content:'✓'; }
+  /* Overview: activity */
+  .overview-grid { display:grid; grid-template-columns: 1fr; gap:10px; align-items:stretch; }
+  .activity-box { width:100%; border:var(--line-w) solid var(--line); border-radius:12px; padding:16px; background:linear-gradient(180deg, rgba(124,58,237,0.2) 0%, rgba(124,58,237,0.15) 100%); display:flex; flex-direction:column; gap:12px; min-height:320px; box-shadow: inset 0 0 0 1px rgba(124,58,237,0.25); backdrop-filter: blur(10px); }
 
   /* activity preset buttons */
   .act-preset { display:flex; gap:12px; height:100%; }
@@ -266,13 +251,6 @@
   .activity-row .name { width:96px; font-size:.85rem; color:var(--text-secondary); }
   .activity-row .wrap { flex:1; height:8px; background:rgba(255,255,255,0.1); border-radius:999px; overflow:hidden; }
   .activity-row .bar  { height:100%; width:0%; background:#7c3aed; }
-  .calendar-box input.cal-input { position:absolute; opacity:0; width:0; height:0; pointer-events:none; }
-  .calendar-box .flatpickr-calendar { box-shadow:none !important; border:0 !important; background:transparent !important; position:static !important; width:100%; max-width:100%; }
-  .calendar-box .flatpickr-months { background:transparent !important; }
-  .calendar-box .flatpickr-innerContainer { background:transparent !important; }
-  .calendar-box .flatpickr-day.today { border-color: var(--accent); }
-  .calendar-box .flatpickr-day.selected { background: var(--accent); border-color: var(--accent); }
-  .calendar-box { overflow:hidden; }
 
   
 
@@ -330,9 +308,8 @@
     /* stack the two small plots */
     .grid-plots { grid-template-columns: 1fr; gap: 10px; }
 
-    /* Overview: stack map and calendar, taller but responsive */
+    /* Overview: responsive */
     .overview-grid { grid-template-columns: 1fr; }
-    #overviewMap, .calendar-box { height: clamp(220px, 34vh, 360px); width: 100%; }
 
     /* trim spacing */
     body { padding: 10px 12px; }
@@ -403,12 +380,6 @@
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js"></script>
-<!-- Leaflet (map) -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<!-- Flatpickr (calendar) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"/>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <body>
 <div class="app">
@@ -495,24 +466,10 @@
         <span class="spacer"></span>
       </header>
     </div>
-    <!-- Overview: Map + Calendar -->
+    <!-- Overview: Activity Modes -->
     <div class="panel">
       <div class="title">Overview</div>
       <div class="overview-grid">
-        <div id="overviewMap"></div>
-        <div class="calendar-box">
-          <input id="overviewCal" class="cal-input" type="text"/>
-        </div>
-        <div class="task-box">
-          <div class="title">Tasks</div>
-          <div class="task-list">
-            <div class="task-item">Morning meditation</div>
-            <div class="task-item completed">Check device connection</div>
-            <div class="task-item">Review activity data</div>
-            <div class="task-item">Update settings</div>
-            <div class="task-item completed">Save log files</div>
-          </div>
-        </div>
         <div class="activity-box">
           <div class="title">Modes</div>
           <div class="act-preset" style="margin-top:6px">
@@ -607,13 +564,7 @@ function globalFrame(ts){
   _lastDrawTs = ts;
   for (const c of _cards){
     resizeCanvasDPRThrottled(c.timePlot, c.timeCtx, ts);
-    resizeCanvasDPRThrottled(c.phPlot, c.phCtx, ts);
-    /* GAIT: dpi + draw */
-    resizeCanvasDPRThrottled(c.gaitCanvas, c.gaitCtx, ts);
-
     c.drawTime();
-    c.drawPortrait();
-    c.drawGait();
   }
   _rafId = requestAnimationFrame(globalFrame);
 }
@@ -689,14 +640,7 @@ class DeviceCard {
     // Canvases
     this.timePlot  = this.root.querySelector('.plot-time');
     this.timeCtx   = this.timePlot.getContext('2d');
-    this.phPlot    = this.root.querySelector('.plot-portrait');
-    this.phCtx     = this.phPlot.getContext('2d');
 
-    // Gait UI
-    this.gaitCanvas = this.root.querySelector('.plot-gait');
-    this.gaitCtx    = this.gaitCanvas.getContext('2d');
-    this.gaitCadEl  = this.root.querySelector('.gait-cad');
-    this.gaitStepEl = this.root.querySelector('.gait-step');
 
     // Battery UI (topbar icon)
     this.battIconEl  = document.getElementById('top-batt-icon');
@@ -745,8 +689,6 @@ class DeviceCard {
 
     // initial DPI sizing
     resizeCanvasDPR(this.timePlot, this.timeCtx);
-    resizeCanvasDPR(this.phPlot, this.phCtx);
-    resizeCanvasDPR(this.gaitCanvas, this.gaitCtx);
 
     // Buttons
     this.btnConnect     = this.root.querySelector('.btnConnect');
@@ -813,25 +755,7 @@ class DeviceCard {
     this.xOn = new Set();
     this.xOff= new Set();
 
-    /* ----------- PHASE PORTRAIT ----------- */
-    this.velBuf = [];
-    this.lastPitch = null;
-    this.derivAlpha = 0.3;
 
-    // Autoscaling for portrait
-    this.ppScale = { xMin: -90, xMax: 90, yMin: -20, yMax: 20 };
-    this.ppAlpha = 0.3;
-    this.ppWin   = 300;
-    this.ppMinXSpan = 10;
-    this.ppMinYSpan = 2;
-
-    // Visual bands for the stride-normalized gait plot
-    this._gc_bands = [
-      { name: 'Stance', from: 0,  to: 60,  color: 'rgba(31,41,55,0.08)' },  // gray
-      { name: 'Swing',  from: 60, to: 100, color: 'rgba(16,185,129,0.10)' }  // green
-    ];
-    // Optional “textbook” phase splits (rough)
-    this._gc_phaseTicks = [0, 10, 40, 60, 80, 100];
 
     // Angle→Frequency Map
     this.angleMapEnabled   = false;
@@ -920,32 +844,7 @@ class DeviceCard {
       });
     }
 
-    // initial axes
-    this.drawPortraitAxes();
 
-    /* --- Gait detection state --- */
-    this.GAIT_STALE_MS   = 5000;
-    this.gaitOn          = true;
-    this.MIN_STEP_MS     = 100;
-    this.MAX_STEP_MS     = 3500;
-    this.VEL_THR         = 0.08;
-    this.VEL_HYS         = 0.03;
-    this.PEAK_REFRACT_MS = 120;
-    this.pitchVis = null;   // EMA for plotting only
-
-    this._g_lastVel      = 0;
-    this._g_lastDir      = 0;      // -1, 0, +1
-    this._g_lastEventMs  = -1e9;
-    this._g_currBuf      = [];     // [{t,p}]
-    this._g_prevStartMs  = null;
-
-    this._g_cycles       = [];     // Float32Array(101)
-    this._g_cyclesMax    = 10;
-    this._g_lastCadWin   = [];
-
-    // Gait progress state (used for moving marker)
-    this._g_Tms          = 700;    // smoothed step period
-    this._gw_snapUntil   = 0;      // snap to 100% just after HS
   }
 
   template(){
@@ -1012,29 +911,6 @@ class DeviceCard {
             </div>
           </div>
 
-          <!-- Side-by-side plots -->
-          <div class="grid-plots" style="margin-top:8px">
-            <details class="plot-block" open>
-              <summary class="plot-title">
-                <span class="plot-caret">▸</span>
-                Phase portrait plot
-              </summary>
-              <canvas class="plot-portrait" width="900" height="240"></canvas>
-            </details>
-
-            <details class="plot-block" open>
-              <summary class="plot-title">
-                <span class="plot-caret">▸</span>
-                Gait cycle plot
-                <span class="plot-subtle gait-metrics">
-                  Cadence: <span class="gait-cad">—</span> spm • Step: <span class="gait-step">—</span> ms
-                </span>
-              </summary>
-              <div class="gait-wrap">
-                <canvas class="plot-gait" width="900" height="240"></canvas>
-              </div>
-            </details>
-          </div>
 
           <!-- Plot options (collapsible) -->
           <details class="plot-block">
@@ -1480,10 +1356,6 @@ class DeviceCard {
           }
           if (this.gpsCogEl)  this.gpsCogEl.textContent = Number.isFinite(cog) ? cog.toFixed(1) : '—';
 
-          // Update overview map if available
-          if (Number.isFinite(lat) && Number.isFinite(lon) && typeof window.updateOverviewGPS === 'function') {
-            try { window.updateOverviewGPS(lat, lon, !!fx); } catch(_e) {}
-          }
 
           // Update sidebar GPS
           const g = (id, text)=>{ const el=document.getElementById(id); if(el) el.textContent = text; };
@@ -1542,22 +1414,13 @@ class DeviceCard {
     this.timeBuf.push(t);
     this.sampleIndex++;
 
-    if (this.lastPitch == null) this.lastPitch = v;
-    const rawVel  = v - this.lastPitch;
-    const lastVel = this.velBuf.length ? this.velBuf[this.velBuf.length - 1] : rawVel;
-    const vel     = lastVel + this.derivAlpha * (rawVel - lastVel);
-    this.velBuf.push(vel);
-    this.lastPitch = v;
-
     if (this.pitchBuf.length > this.BUF_MAX) {
       const over = this.pitchBuf.length - this.BUF_MAX;
       const drop = Math.max(over, 100);
       this.pitchBuf.splice(0, drop);
       this.timeBuf.splice(0, drop);
-      this.velBuf.splice(0, drop);
     }
 
-    this.updateGait(performance.now(), v);
   }
 
   applyTrigger(v){
@@ -1751,80 +1614,6 @@ class DeviceCard {
 
   drawTimeLoop(){}
 
-  /* ---------- Phase portrait ---------- */
-  clearPortrait(){ this.phCtx.clearRect(0,0,this.phPlot.width/(window.devicePixelRatio||1),this.phPlot.height/(window.devicePixelRatio||1)); }
-  drawPortraitAxes(zx = null, zy = null){
-    const dpr = window.devicePixelRatio || 1;
-    const ctx=this.phCtx, w=this.phPlot.width/dpr, h=this.phPlot.height/dpr;
-    ctx.clearRect(0,0,w,h);
-    ctx.strokeStyle='rgba(255,255,255,0.2)'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.moveTo(40, 10); ctx.lineTo(40, h-20); ctx.lineTo(w-10, h-20); ctx.stroke();
-
-    if (zx !== null || zy !== null){
-      ctx.setLineDash([4,4]); ctx.strokeStyle='rgba(255,255,255,0.15)';
-      if (zy !== null){ ctx.beginPath(); ctx.moveTo(40, zy); ctx.lineTo(w-10, zy); ctx.stroke(); }
-      if (zx !== null){ ctx.beginPath(); ctx.moveTo(zx, 10); ctx.lineTo(zx, h-20); ctx.stroke(); }
-      ctx.setLineDash([]);
-    }
-
-    ctx.save();
-    ctx.fillStyle = 'rgba(255,255,255,0.7)';
-    ctx.font = '12px system-ui';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'alphabetic';
-    ctx.fillText('Pitch angle (°)', (w-10 + 40)/2, h - 4);
-    ctx.translate(18, (h-20 + 10)/2);
-    ctx.rotate(-Math.PI/2);
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'top';
-    ctx.fillText('Angular velocity (°/step)', 0, 0);
-    ctx.restore();
-  }
-
-  drawPortrait(){
-    const dpr = window.devicePixelRatio || 1;
-    const ctx=this.phCtx, w=this.phPlot.width/dpr, h=this.phPlot.height/dpr;
-    this.drawPortraitAxes();
-    if (this.pitchBuf.length < 3) return;
-
-    const N = Math.min(this.ppWin, this.pitchBuf.length);
-    const start = this.pitchBuf.length - N;
-    const sliceP = this.pitchBuf.slice(start);
-    const sliceV = this.velBuf.slice(start).map(v => v ?? 0);
-
-    let pMin = Math.min(...sliceP), pMax = Math.max(...sliceP);
-    const pPad = Math.max(2, 0.1 * (pMax - pMin + 1e-6));
-    pMin -= pPad; pMax += pPad;
-    if ((pMax - pMin) < this.ppMinXSpan){ const mid = 0.5*(pMin + pMax); pMin = mid - this.ppMinXSpan/2; pMax = mid + this.ppMinXSpan/2; }
-
-    let vMin = Math.min(...sliceV), vMax = Math.max(...sliceV);
-    const vPad = Math.max(0.5, 0.15 * (vMax - vMin + 1e-6));
-    vMin -= vPad; vMax += vPad;
-    if (!isFinite(vMin) || !isFinite(vMax) || vMin === vMax){ vMin = this.ppScale.yMin; vMax = this.ppScale.yMax; }
-    if ((vMax - vMin) < this.ppMinYSpan){ const mid = 0.5*(vMin + vMax); vMin = mid - this.ppMinYSpan/2; vMax = mid + this.ppMinYSpan/2; }
-
-    const a = this.ppAlpha, lerp = (o,n,t)=> o + t*(n - o);
-    this.ppScale.xMin = lerp(this.ppScale.xMin, pMin, a);
-    this.ppScale.xMax = lerp(this.ppScale.xMax, pMax, a);
-    this.ppScale.yMin = lerp(this.ppScale.yMin, vMin, a);
-    this.ppScale.yMax = lerp(this.ppScale.yMax, vMax, a);
-
-    const { xMin, xMax, yMin, yMax } = this.ppScale;
-    const mapX=(v)=>{ const L=40,R=w-10; const t=(v-xMin)/((xMax-xMin)+1e-9); return L + t*(R-L); };
-    const mapY=(d)=>{ const T=10,B=h-20; const t=(d-yMin)/((yMax-yMin)+1e-9); return B - t*(B-T); };
-
-    this.drawPortraitAxes(mapX(0), mapY(0));
-
-    ctx.strokeStyle = '#7c3aed';
-    ctx.lineWidth = 2.2; ctx.beginPath();
-    for (let i=start; i<this.pitchBuf.length; i++){
-      const px = mapX(this.pitchBuf[i]);
-      const py = mapY(this.velBuf[i] || 0);
-      if (i===start) ctx.moveTo(px,py); else ctx.lineTo(px,py);
-    }
-    ctx.stroke();
-  }
-
   /* ---------- CSV ---------- */
   async saveCsv(){
     if (!this.pitchBuf.length){ this.log('Nothing to save.'); return; }
@@ -1832,15 +1621,14 @@ class DeviceCard {
     const startIdx = this.sampleIndex - this.pitchBuf.length + 1;
     const t0 = this.timeBuf[0];
 
-    let csv='timestamp_s,t_rel_s,sample_index,pitch_deg,vel_ema,flag\n';
+    let csv='timestamp_s,t_rel_s,sample_index,pitch_deg,flag\n';
     for (let i=0;i<this.pitchBuf.length;i++){
       const t_abs=this.timeBuf[i];
       const t_rel=t_abs - t0;
       const idx  =startIdx + i;
       const pitch=Number(this.pitchBuf[i]).toFixed(6);
-      const vel  =(this.velBuf[i] ?? 0);
       const flag = onSet.has(idx) ? '1' : '0';
-      csv += `${t_abs.toFixed(6)},${t_rel.toFixed(6)},${idx},${pitch},${vel.toFixed(6)},${flag}\n`;
+      csv += `${t_abs.toFixed(6)},${t_rel.toFixed(6)},${idx},${pitch},${flag}\n`;
     }
 
     const blob = new Blob([csv], {type:'text/csv'});
@@ -2298,235 +2086,6 @@ class DeviceCard {
     }
   }
 
-  /* ==== Gait cycle methods ==== */
-  updateGait(t_now_ms, pitchDeg){
-    if (!this.gaitOn) return;
-
-    const rec = { t: t_now_ms, p: pitchDeg };
-    this._g_currBuf.push(rec);
-
-    // velocity (EMA-derived)
-    const vel = (this.velBuf.length ? this.velBuf[this.velBuf.length-1] : 0);
-    const dir = vel > +this.VEL_THR ? +1 : (vel < -this.VEL_THR ? -1 : 0);
-
-    const crossed = (this._g_lastDir > 0 && dir < 0);
-    const refractory_ok = (t_now_ms - this._g_lastEventMs) > this.PEAK_REFRACT_MS;
-
-    if (crossed && refractory_ok){
-      if (this._g_prevStartMs != null){
-        const step_ms = t_now_ms - this._g_prevStartMs;
-        if (step_ms >= this.MIN_STEP_MS && step_ms <= this.MAX_STEP_MS){
-          const cycle = this._resampleStep(this._g_currBuf);
-          if (cycle){
-            this._g_cycles.push(cycle);
-            if (this._g_cycles.length > this._g_cyclesMax) this._g_cycles.shift();
-
-            this._g_lastCadWin.push(step_ms);
-            if (this._g_lastCadWin.length > 12) this._g_lastCadWin.shift();
-            const avg_ms = this._g_lastCadWin.reduce((a,b)=>a+b,0) / this._g_lastCadWin.length;
-            const spm = 60000 / avg_ms;
-            if (this.gaitCadEl)  this.gaitCadEl.textContent  = spm.toFixed(1);
-            if (this.gaitStepEl) this.gaitStepEl.textContent = Math.round(step_ms);
-
-            // update smoothed period + brief snap flag (used by moving marker)
-            this._g_Tms = avg_ms;
-            this._gw_snapUntil = t_now_ms + 60;  // snap 60ms at HS
-          }
-        }
-        this._g_currBuf = [];
-      }
-      this._g_prevStartMs  = t_now_ms;
-      this._g_lastEventMs  = t_now_ms;
-    }
-
-    if (dir !== 0) this._g_lastDir = dir;
-    else if (this._g_lastDir > 0 && vel < +this.VEL_THR - this.VEL_HYS) this._g_lastDir = 0;
-    else if (this._g_lastDir < 0 && vel > -this.VEL_THR + this.VEL_HYS) this._g_lastDir = 0;
-
-    this._g_lastVel = vel;
-  }
-
-  _resampleStep(buf){
-    if (!buf || buf.length < 6) return null;
-    const t0 = buf[0].t, t1 = buf[buf.length-1].t, dt = Math.max(1, t1 - t0);
-    const xs = buf.map(s => (s.t - t0) / dt);
-    const ys = buf.map(s => s.p);
-    for (let i=1;i<xs.length;i++){ if (xs[i] < xs[i-1]) return null; }
-
-    const out = new Float32Array(101);
-    let j = 0;
-    for (let k=0;k<=100;k++){
-      const q = k/100;
-      while (j < xs.length-2 && xs[j+1] < q) j++;
-      const x0 = xs[j],   y0 = ys[j];
-      const x1 = xs[j+1], y1 = ys[j+1];
-      const t  = (q - x0) / Math.max(1e-6, (x1 - x0));
-      out[k] = y0 + t * (y1 - y0);
-    }
-    return out;
-  }
-
-  _drawGaitAxes(ctx, w, h){
-    ctx.clearRect(0,0,w,h);
-    ctx.strokeStyle='rgba(255,255,255,0.2)'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.moveTo(40, 10); ctx.lineTo(40, h-26); ctx.lineTo(w-10, h-26); ctx.stroke();
-
-    ctx.save();
-    ctx.fillStyle = 'rgba(255,255,255,0.7)';
-    ctx.font = '12px system-ui';
-    ctx.textAlign = 'center';
-    ctx.fillText('Gait phase (%)', (w-10+40)/2, h-8);
-    ctx.translate(16, (h-26+10)/2);
-    ctx.rotate(-Math.PI/2);
-    ctx.textAlign='center'; ctx.textBaseline='top';
-    ctx.fillText('Pitch angle (°)', 0, 0);
-    ctx.restore();
-  }
-
-  drawGait(){
-    if (!this.gaitCanvas) return;
-    const dpr = window.devicePixelRatio || 1;
-    const ctx = this.gaitCtx, w = this.gaitCanvas.width/dpr, h = this.gaitCanvas.height/dpr;
-
-    // axes + frame
-    this._drawGaitAxes(ctx, w, h);
-
-    // --- idle detection (DO NOT clear; just mark idle) ---
-    const tnow = performance.now();
-    const idle = (tnow - this._g_lastEventMs > this.GAIT_STALE_MS);
-
-    const L=40, R=w-10, T=10, B=h-26;
-    const xmapPct = (pct)=> L + (pct/100)*(R-L);
-
-    // ===== minimal phase ribbon along bottom axis (replaces big background) =====
-    ctx.save();
-    const ribbonTop = B + 3;
-    const ribbonH   = 6;
-
-    // Stance: 0–60%
-    ctx.fillStyle = 'rgba(55,65,81,0.85)'; // dark gray
-    ctx.fillRect(xmapPct(0), ribbonTop, xmapPct(60)-xmapPct(0), ribbonH);
-
-    // Swing: 60–100%
-    ctx.fillStyle = 'rgba(16,185,129,0.85)'; // green
-    ctx.fillRect(xmapPct(60), ribbonTop, xmapPct(100)-xmapPct(60), ribbonH);
-
-    // Tiny labels
-    ctx.fillStyle = 'rgba(255,255,255,0.7)';
-    ctx.font = '600 12px system-ui';   // was 10px; 600 = semi-bold
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'top';
-    ctx.fillText('Stance', (xmapPct(0)+xmapPct(60))/2, ribbonTop + ribbonH + 1);
-    ctx.fillText('Swing',  (xmapPct(60)+xmapPct(100))/2, ribbonTop + ribbonH + 1);
-
-    ctx.restore();
-
-    // ===== waveforms (mean + std band only) =====
-    const n = this._g_cycles.length;
-    if (n === 0) return;   // nothing drawn yet (but we never clear once we have data)
-
-    // compute mean and std across cycles at each phase index
-    const avg = new Float32Array(101);
-    const std = new Float32Array(101);
-    for (let i = 0; i <= 100; i++) {
-      let s1 = 0, s2 = 0;
-      for (let c = 0; c < n; c++) {
-        const v = this._g_cycles[c][i];
-        s1 += v;
-        s2 += v * v;
-      }
-      const m = s1 / n;
-      const v = Math.max(0, (s2 / n) - m * m);
-      avg[i] = m;
-      std[i] = Math.sqrt(v);
-    }
-
-    // choose y-range based on mean ± std
-    let mn = +Infinity, mx = -Infinity;
-    for (let i = 0; i <= 100; i++) {
-      const lo = avg[i] - std[i];
-      const hi = avg[i] + std[i];
-      if (lo < mn) mn = lo;
-      if (hi > mx) mx = hi;
-    }
-    const pad = Math.max(2, 0.1 * (mx - mn + 1e-6));
-    mn -= pad; mx += pad;
-
-    const xmap = (i)=> L + (i/100)*(R-L);
-    const ymap = (v)=> { const t=(v-mn)/((mx-mn)+1e-9); return B - t*(B-T); };
-
-    // shaded std band (mean ± 1σ) — dim if idle
-    ctx.save();
-    ctx.globalAlpha = idle ? 0.35 : 0.6;
-    ctx.beginPath();
-    for (let i = 0; i <= 100; i++) {
-      const x = xmap(i), y = ymap(avg[i] + std[i]);
-      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-    }
-    for (let i = 100; i >= 0; i--) {
-      const x = xmap(i), y = ymap(avg[i] - std[i]);
-      ctx.lineTo(x, y);
-    }
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(124,58,237,0.18)'; // subtle purple tint
-    ctx.fill();
-    ctx.restore();
-
-    // mean curve — dim if idle
-    ctx.save();
-    ctx.globalAlpha = idle ? 0.7 : 1.0;
-    ctx.strokeStyle = '#7c3aed';
-    ctx.lineWidth = 2.6;
-    ctx.beginPath();
-    for (let i = 0; i <= 100; i++) {
-      const x = xmap(i), y = ymap(avg[i]);
-      if (i === 0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-    }
-    ctx.stroke();
-    ctx.restore();
-
-    /* ===== Moving phase marker ===== */
-    if (idle) {
-      // Freeze marker at last heel-strike (100%) when idle
-      const px = xmapPct(100);
-      const py = ymap(avg[100]);
-      ctx.save();
-      ctx.globalAlpha = 0.6;
-      ctx.fillStyle = '#9ca3af'; // gray
-      ctx.strokeStyle = 'white';
-      ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.arc(px, py, 15, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-      ctx.restore();
-      return;
-    }
-
-    // Active animation
-    const now = performance.now();
-    const Tms = Math.max(this.MIN_STEP_MS, Math.min(this.MAX_STEP_MS, this._g_Tms || 700));
-    let pct = (this._g_prevStartMs != null) ? ((now - this._g_prevStartMs) / Tms) : 0;
-    pct = pct - Math.floor(pct);
-    if (now < this._gw_snapUntil) pct = 1;
-
-    const p100 = pct * 100;
-    const i0 = Math.max(0, Math.min(100, Math.floor(p100)));
-    const i1 = Math.max(0, Math.min(100, i0 + 1));
-    const tt = p100 - i0;
-    const yVal = avg[i0]*(1-tt) + avg[i1]*tt;
-
-    const px = xmapPct(p100);
-    const py = ymap(yVal);
-
-    const v = this.velBuf.length ? this.velBuf[this.velBuf.length-1] : 0;
-    const swing = v > +this.VEL_THR;
-    const color = swing ? '#22c55e' : '#ef4444';
-
-    ctx.save();
-    ctx.fillStyle = color;
-    ctx.strokeStyle = 'white';
-    ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.arc(px, py, 15, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-    ctx.restore();
-  }
 
 }
 
@@ -2676,49 +2235,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     document.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeModal(); });
   }catch(_e){}
 
-  // Map
-  if (typeof L !== 'undefined'){
-    try{
-      const map = L.map('overviewMap', { zoomControl: true });
-      const center = [37.423, -122.084];
-      map.setView(center, 14);
-      // Dark basemap to match theme
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        maxZoom: 20,
-        attribution: '© OpenStreetMap, © CARTO'
-      }).addTo(map);
-
-      // Save globals for live GPS updates
-      window._overviewMap = map;
-      window._gpsCentered = false;
-      window._gpsMarker = L.circleMarker(center, { radius: 6, color: '#0b6bf2', fillColor:'#3b82f6', fillOpacity:.8 }).addTo(map);
-      window._gpsTrackLatLngs = [];
-      window._gpsTrack = L.polyline([], { color:'#0b6bf2', weight:3, opacity:0.6 }).addTo(map);
-
-      // Global updater: moves marker, appends to track, recenters on first fix
-      window.updateOverviewGPS = function(lat, lon, hasFix){
-        try{
-          const ll = [lat, lon];
-          if (window._gpsMarker) window._gpsMarker.setLatLng(ll);
-          if (hasFix) {
-            window._gpsTrackLatLngs.push(ll);
-            if (window._gpsTrack) window._gpsTrack.setLatLngs(window._gpsTrackLatLngs);
-          }
-          if (!window._gpsCentered && hasFix){
-            window._overviewMap.setView(ll, 15);
-            window._gpsCentered = true;
-          }
-        }catch(_e){}
-      };
-    }catch(e){ console.warn('Map init error', e); }
-  }
-
-  // Calendar
-  if (window.flatpickr){
-    try{
-      window.flatpickr('#overviewCal', { inline: true, defaultDate: new Date() });
-    }catch(e){ console.warn('Calendar init error', e); }
-  }
   // Sidebar resizer
   try{
     const res = document.getElementById('resizer');
@@ -2730,7 +2246,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
         const w = Math.max(180, Math.min(500, startW + dx));
         document.querySelector('.app').style.setProperty('--sidebar-w', w + 'px');
         res.style.left = w + 'px';
-        if (window._overviewMap) window._overviewMap.invalidateSize();
       };
       const onUp=()=>{ dragging=false; window.removeEventListener('mousemove',onMove); window.removeEventListener('touchmove',onMove); window.removeEventListener('mouseup',onUp); window.removeEventListener('touchend',onUp); };
       res.addEventListener('mousedown',(e)=>{ dragging=true; startX=e.clientX; startW=parseInt(getComputedStyle(document.querySelector('.app')).getPropertyValue('--sidebar-w'))||260; window.addEventListener('mousemove',onMove); window.addEventListener('mouseup',onUp); });
@@ -2797,14 +2312,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
       for (const c of _cards){ if (c.logEl) c.logEl.textContent = ''; }
     });
     byId('sbDisconnect')?.addEventListener('click', ()=>{ for (const c of _cards) c.disconnect(); });
-  }catch(_e){}
-  // Task items toggle functionality
-  try{
-    document.querySelectorAll('.task-item').forEach(task=>{
-      task.addEventListener('click', ()=> {
-        task.classList.toggle('completed');
-      });
-    });
   }catch(_e){}
   // Initialize global activity rows immediately so bars show from first ACT
   try{
