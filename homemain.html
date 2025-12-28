@@ -187,14 +187,6 @@
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
   .tag { font-variant-numeric: tabular-nums; font-weight: 700; }
 
-  /* [ACTIVITY GUI] minimal styles */
-  .act-pill { background:rgba(124,58,237,0.2); color: var(--text); }
-  .act-conf { color: var(--muted); margin-left: 4px; }
-  .act-bars .row { align-items: center; }
-  .act-bars .name { width: 110px; font-size: .85rem; color:var(--text-secondary); }
-  .act-bars .barwrap { flex:1; height:8px; background:rgba(255,255,255,0.1); border-radius:999px; overflow:hidden; }
-  .act-bars .bar { height:100%; width:0%; background:#7c3aed; transition: width .2s ease; }
-  .act-bars .pct { width:42px; text-align:right; font-variant-numeric: tabular-nums; font-size:.8rem; color:var(--muted); }
 
   /* Side-by-side plot grid */
   .grid-plots { display:grid; grid-template-columns: 1fr; gap:12px; align-items:start; }
@@ -205,52 +197,6 @@
   .gait-metric { font-size:.9rem; color:var(--text-secondary); }
   .gait-sub { color:var(--muted); font-size:.85rem; }
 
-  /* Overview: activity */
-  .overview-grid { display:grid; grid-template-columns: 1fr; gap:10px; align-items:stretch; }
-  .activity-box { width:100%; border:var(--line-w) solid var(--line); border-radius:12px; padding:16px; background:linear-gradient(180deg, rgba(124,58,237,0.2) 0%, rgba(124,58,237,0.15) 100%); display:flex; flex-direction:column; gap:12px; min-height:320px; box-shadow: inset 0 0 0 1px rgba(124,58,237,0.25); backdrop-filter: blur(10px); }
-
-  /* activity preset buttons */
-  .act-preset { display:flex; gap:12px; height:100%; }
-  .act-btn { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; border: var(--line-w) solid var(--line); background:#7c3aed; color:#fff; border-radius:14px; padding:24px 16px; cursor:pointer; font-size:1.6rem; font-weight:700; min-height:0; position:relative; }
-  .act-btn .ico{ font-size:3.8rem; line-height:1; display:block; }
-  .act-btn:hover{ background:#6d28d9; }
-  .act-btn.active{ background:#6d28d9; border-color:#7c3aed; box-shadow:0 0 0 2px rgba(124,58,237,0.25) inset; }
-
-  /* ON/OFF pill in top-right corner */
-  .act-btn::after{ content:'OFF'; position:absolute; top:10px; right:10px; padding:2px 8px; font-size:.72rem; font-weight:800; border-radius:999px; background:rgba(255,255,255,0.18); color:#f5f3ff; border:1px solid rgba(255,255,255,0.28); letter-spacing:.02em; }
-  .act-btn.active::after{ content:'ON'; background:#a78bfa; color:#2e1065; border-color:#c4b5fd; }
-
-  /* Subtle purple pulse when active */
-  .act-btn.active::before{ content:""; position:absolute; inset:-4px; border-radius:16px; box-shadow:0 0 22px 8px rgba(124,58,237,0.45); opacity:.45; animation: actPulse 1.8s ease-in-out infinite; pointer-events:none; }
-  @keyframes actPulse{ 0%,100%{ opacity:.35; box-shadow:0 0 18px 6px rgba(124,58,237,0.35);} 50%{ opacity:.7; box-shadow:0 0 28px 12px rgba(124,58,237,0.55);} }
-
-  /* Make Activity Training panel match activity/plot heights */
-  .train-panel { height:320px; display:flex; flex-direction:column; }
-  .train-panel .grid2 { flex:0 0 auto; }
-  .train-panel .small.muted { margin-top:auto; }
-
-  /* Activity Training theming to match Activity box */
-  .train-panel { background:linear-gradient(180deg, rgba(124,58,237,0.2) 0%, rgba(124,58,237,0.15) 100%); box-shadow: inset 0 0 0 1px rgba(124,58,237,0.25); border-color: rgba(124,58,237,0.5); backdrop-filter: blur(10px); }
-  .train-panel .title { color:var(--text); font-weight:800; }
-  .train-panel .small.muted { color:var(--text-secondary); opacity:.85; }
-  .train-btn { display:flex; align-items:center; justify-content:center; gap:12px; padding:16px 18px; border-radius:14px; border:1px solid rgba(124,58,237,0.5); background:rgba(124,58,237,0.2); color:var(--text); font-weight:800; font-size:1.05rem; letter-spacing:.01em; box-shadow:0 3px 6px rgba(0,0,0,0.3); transition: transform .06s ease, box-shadow .15s ease, background .15s ease; }
-  .train-btn .ico { font-size:1.6rem; line-height:1; }
-  .train-btn:hover{ background:rgba(124,58,237,0.35); box-shadow:0 6px 14px rgba(124,58,237,0.4); color: #fff; }
-  .train-btn:active{ transform: translateY(1px); box-shadow:0 2px 6px rgba(0,0,0,0.4) inset; }
-
-  /* Large activity icons */
-  .act-icons{ display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:14px; margin-top:10px; }
-  .act-icon{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:18px 8px; border-radius:14px; background:rgba(124,58,237,0.15); border:1px solid rgba(124,58,237,0.4); color:#c4b5fd; font-weight:800; user-select:none; }
-  .act-icon .ico{ font-size:3.2rem; line-height:1; }
-  .act-icon .nm{ font-size:0.95rem; letter-spacing:.01em; }
-  .act-icon.active{ background:rgba(124,58,237,0.35); border-color:#7c3aed; box-shadow:0 0 0 2px rgba(124,58,237,0.3) inset, 0 0 20px rgba(124,58,237,0.4); color:#fff; }
-  @media (max-width: 900px){ .act-icons{ grid-template-columns: repeat(2, minmax(0,1fr)); } .act-icon .ico{ font-size:2.6rem; } }
-  .activity-head { display:flex; align-items:center; gap:8px; }
-  .activity-bars { display:grid; gap:6px; overflow:auto; }
-  .activity-row { display:flex; align-items:center; gap:8px; }
-  .activity-row .name { width:96px; font-size:.85rem; color:var(--text-secondary); }
-  .activity-row .wrap { flex:1; height:8px; background:rgba(255,255,255,0.1); border-radius:999px; overflow:hidden; }
-  .activity-row .bar  { height:100%; width:0%; background:#7c3aed; }
 
   
 
@@ -466,20 +412,6 @@
         <span class="spacer"></span>
       </header>
     </div>
-    <!-- Overview: Activity Modes -->
-    <div class="panel">
-      <div class="title">Overview</div>
-      <div class="overview-grid">
-        <div class="activity-box">
-          <div class="title">Modes</div>
-          <div class="act-preset" style="margin-top:6px">
-            <button class="act-btn" data-mode="RELAX"><span class="ico">🧘</span> Relax</button>
-            <button class="act-btn" data-mode="SLEEP"><span class="ico">😴</span> Sleep</button>
-            <button class="act-btn" data-mode="HYPE"><span class="ico">⚡</span> Hype</button>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <div id="devices"></div>
   </main>
@@ -502,14 +434,6 @@ const NUS_SERVICE = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
 const NUS_TX      = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
 const NUS_RX      = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
 
-const ACT_COLORS = {
-  "Still":   "#ef4444",
-  "Walking": "#f59e0b",
-  "Running": "#22c55e",
-  "Stairs":  "#0ea5e9"
-};
-// Global list of activity classes for consistent UI ordering
-const GLOBAL_CLASSES = ["Still","Walking","Running","Stairs"];
 
 /* ===== DPI-aware canvas helper ===== */
 function resizeCanvasDPR(canvas, ctx){
@@ -630,12 +554,6 @@ class DeviceCard {
     this.gpsCogEl   = this.root.querySelector('.gps-cog');
 
 
-    // [ACTIVITY GUI]
-    this.actLabelEl = this.root.querySelector('.act-label');
-    this.actConfEl  = this.root.querySelector('.act-conf');
-    this.actBarsEl  = this.root.querySelector('.act-bars');
-    this._actOrder = [];
-    this._actRows  = new Map();
 
     // Canvases
     this.timePlot  = this.root.querySelector('.plot-time');
@@ -647,45 +565,6 @@ class DeviceCard {
     this.battLevelEl = document.getElementById('top-batt-level');
     this.battPctEl   = document.getElementById('top-batt-pct');
 
-    // --- Online training state ---
-    this.TRAIN_SEC = 20;       // train time
-    this.WIN_SEC   = 3.0;      // must match firmware
-    this.HOP_SEC   = 0.2;
-    
-    this.CLASSES = ['Still','Walking','Running','Stairs'];
-    this.trainRaw  = { Still: [], Walking: [], Running: [], Stairs: [] };
-
-    // Wire buttons
-    this.btnTrainStill = this.root.querySelector('.btnTrainStill');
-    this.btnTrainWalk  = this.root.querySelector('.btnTrainWalk');
-    this.btnTrainRun   = this.root.querySelector('.btnTrainRun');
-    this.btnTrainStairs = this.root.querySelector('.btnTrainStairs');
-    this.btnTrainAll   = this.root.querySelector('.btnTrainAll');
-
-    if (this.btnTrainStill) this.btnTrainStill.onclick = ()=> this.captureClass('Still', this.TRAIN_SEC);
-    if (this.btnTrainWalk)  this.btnTrainWalk.onclick  = ()=> this.captureClass('Walking', this.TRAIN_SEC);
-    if (this.btnTrainRun)   this.btnTrainRun.onclick   = ()=> this.captureClass('Running', this.TRAIN_SEC);
-    if (this.btnTrainStairs) this.btnTrainStairs.onclick = ()=> this.captureClass('Stairs',  this.TRAIN_SEC);
-    if (this.btnTrainAll)   this.btnTrainAll.onclick   = ()=> this.trainAndDeploy();
-
-    // --- Online training capture state ---
-    this._capActive = false;
-    this._capTs = [];
-    this._capPitch = [];
-
-    // local/browser classifier state
-    this.trainedModel = null;
-    this.normMean = null;
-    this.normStd  = null;
-    this.clsTimer = null;
-
-    // --- temporal smoothing state ---
-    this.probEMA = new Array(this.CLASSES.length).fill(0);
-    this.alphaEMA = 0.15;       // EMA smoothing (0.1–0.3 typical)
-    this.lastLabel = null;     // index of last chosen class
-    this.lastChangeMs = 0;     // when we last switched classes
-    this.dwellMs = 100;        // must hold ≥ this long before switching
-    this.switchMargin = 0.06;  // new class must beat old by +8%
 
     // initial DPI sizing
     resizeCanvasDPR(this.timePlot, this.timeCtx);
@@ -860,11 +739,6 @@ class DeviceCard {
           (<span class="batt-p">—</span>%)
         </span>
 
-        <!-- [ACTIVITY GUI] Activity pill -->
-        <span class="muted">• Activity:
-          <span class="pill act-pill"><span class="act-label">—</span></span>
-          <span class="act-conf small">0%</span>
-        </span>
 
         
         <span class="pill status">Disconnected</span>
@@ -875,30 +749,15 @@ class DeviceCard {
       <div class="grid-main">
         <!-- LEFT COLUMN -->
         <div class="col">
-          <!-- Time plot + Activity side-by-side -->
-          <div class="grid2">
-            <details class="plot-block" open>
-              <summary class="plot-title">
-                <span class="plot-caret">▸</span>
-                IMU plot
-              </summary>
-              <canvas class="plot-time" width="700" height="240"></canvas>
-            </details>
+          <!-- Time plot -->
+          <details class="plot-block" open>
+            <summary class="plot-title">
+              <span class="plot-caret">▸</span>
+              IMU plot
+            </summary>
+            <canvas class="plot-time" width="700" height="240"></canvas>
+          </details>
 
-            <!-- Activity (moved next to IMU plot) -->
-            <div class="activity-box">
-              <div class="title">Activity</div>
-              
-              <!-- Large icons for activity classes -->
-              <div class="act-icons">
-                <div class="act-icon" data-k="Still"><span class="ico">🧍</span><span class="nm">Still</span></div>
-                <div class="act-icon" data-k="Walking"><span class="ico">🚶</span><span class="nm">Walking</span></div>
-                <div class="act-icon" data-k="Running"><span class="ico">🏃</span><span class="nm">Running</span></div>
-                <div class="act-icon" data-k="Stairs"><span class="ico">🪜</span><span class="nm">Stairs</span></div>
-              </div>
-              <!-- Multi-class distribution bars: Still, Walking, Running, Stairs -->
-              <div class="act-bars" style="display:none; margin:8px 0 0;"></div>
-            </div>
           </div>
 
           <!-- IMU Control -->
@@ -929,22 +788,6 @@ class DeviceCard {
 
         <!-- RIGHT COLUMN -->
         <div class="col">
-          <div class="panel train-panel">
-            <div class="title">Activity Training (online)</div>
-            <div class="grid2">
-              <button class="train-btn btnTrainStill"><span class="ico">🧘</span> <span>Train Still (20s)</span></button>
-              <button class="train-btn btnTrainWalk"><span class="ico">🚶</span> <span>Train Walking (20s)</span></button>
-            </div>
-            <div class="grid2" style="margin-top:6px">
-              <button class="train-btn btnTrainRun"><span class="ico">🏃</span> <span>Train Running (20s)</span></button>
-              <button class="train-btn btnTrainStairs"><span class="ico">🪜</span> <span>Train Stairs (20s)</span></button>
-            </div>
-            <div class="grid2" style="margin-top:6px">
-              <div></div>
-              <button class="train-btn btnTrainAll"><span class="ico">🚀</span> <span>Train + Deploy (use all)</span></button>
-            </div>
-            <div class="small muted">Collect ~20s per class → trains MLP in the browser.</div>
-          </div>
           <details class="plot-block">
             <summary class="plot-title">
               <span class="plot-caret">▸</span>
@@ -1167,92 +1010,6 @@ class DeviceCard {
     }catch(e){ this.log('Write error: ' + e); }
   }
 
-  /* [ACTIVITY GUI] helpers */
-  setActivity(label, conf){
-    const pct = Math.round(Math.max(0, Math.min(1, conf || 0)) * 100);
-    if (this.actLabelEl) this.actLabelEl.textContent = label || '—';
-    if (this.actConfEl)  this.actConfEl.textContent  = pct + '%';
-    // Highlight large icons to match the current label
-    try{
-      document.querySelectorAll('.act-icon').forEach(el=>{
-        const k = el.getAttribute('data-k');
-        if (k === label) el.classList.add('active'); else el.classList.remove('active');
-      });
-    }catch(_e){}
-    // Optional global mirror (frame is empty now; harmless if absent)
-    const gl = document.querySelector('.glob-act-label');
-    const gc = document.querySelector('.glob-act-conf');
-    if (gl) gl.textContent = label || '—';
-    if (gc) gc.textContent = pct + '%';
-
-    
-  }
-
-  setActivityDist(obj){
-    if (!obj || typeof obj !== 'object' || !this.actBarsEl) return;
-    for (const k of Object.keys(obj)){
-      if (!this._actRows.has(k)){
-        this._actOrder.push(k);
-        const row = document.createElement('div');
-        row.className = 'row';
-        row.innerHTML = `
-          <div class="name"></div>
-          <div class="barwrap"><div class="bar"></div></div>
-          <div class="pct">0%</div>`;
-        row.querySelector('.name').textContent = k;
-        this.actBarsEl.appendChild(row);
-        this._actRows.set(k, {
-          row,
-          bar: row.querySelector('.bar'),
-          pct: row.querySelector('.pct')
-        });
-        const color = ACT_COLORS[k] || "#3b82f6";
-        row.querySelector('.bar').style.background = color;
-      }
-    }
-    this.actBarsEl.style.display = 'block';
-
-    for (const k of this._actOrder){
-      const v = Math.max(0, Math.min(1, obj[k] ?? 0));
-      const r = this._actRows.get(k);
-      if (!r) continue;
-      r.bar.style.width = Math.round(v * 100) + '%';
-      r.pct.textContent = Math.round(v * 100) + '%';
-    }
-
-    let bestLabel = '—', bestV = -1;
-    for (const [k,v] of Object.entries(obj)){ if (v > bestV){ bestV = v; bestLabel = k; } }
-    this.setActivity(bestLabel, Math.max(0, bestV));
-
-    // Global distribution mirror
-    try{
-      const bars = document.getElementById('globActBars');
-      if (bars){
-        // ensure rows for all keys
-        const keys = Object.keys(obj);
-        const existing = new Set(Array.from(bars.children).map(ch => ch.getAttribute('data-k')));
-        for (const k of keys){
-          if (!existing.has(k)){
-            const row = document.createElement('div');
-            row.className = 'activity-row';
-            row.setAttribute('data-k', k);
-            row.innerHTML = `<div class="name"></div><div class="wrap"><div class="bar"></div></div><div class="pct">0%</div>`;
-            row.querySelector('.name').textContent = k;
-            const color = ACT_COLORS[k] || '#3b82f6';
-            row.querySelector('.bar').style.background = color;
-            bars.appendChild(row);
-          }
-        }
-        // update widths
-        for (const row of Array.from(bars.children)){
-          const k = row.getAttribute('data-k');
-          const v = Math.max(0, Math.min(1, obj[k] ?? 0));
-          row.querySelector('.bar').style.width = Math.round(v*100) + '%';
-          row.querySelector('.pct').textContent = Math.round(v*100) + '%';
-        }
-      }
-    }catch(_e){}
-  }
 
   /* ---------- Notify handler ---------- */
   onNotify(ev) {
@@ -1265,13 +1022,6 @@ class DeviceCard {
         const v   = parseFloat(parts[1]);
         const tms = parts.length >= 3 ? parseInt(parts[2], 10) : null; // device ms if present
         if (!isNaN(v)) {
-          // always record raw for training
-          if (this._capActive) {
-            const t = performance.now() / 1000;
-            this._capTs.push(t);
-            this._capPitch.push(v);
-          }
-
           if (!this.chkPause?.checked) {
             this.pitchEl.textContent = v.toFixed(2);
 
@@ -1285,21 +1035,6 @@ class DeviceCard {
         }
       }
 
-      else if (line.indexOf('ACT,') === 0) {
-        const parts = line.split(',');
-        const label = (parts[1] || '').trim();
-        const conf  = parseFloat(parts[2] || '0');
-        this.setActivity(label, isFinite(conf) ? conf : 0);
-      }
-      else if (line.indexOf('ACLASS,') === 0) {
-        try {
-          const jsonStr = line.slice('ACLASS,'.length).trim();
-          const obj = JSON.parse(jsonStr);
-          this.setActivityDist(obj);
-        } catch (e) {
-          this.log('ACLASS parse error: ' + e);
-        }
-      }
 
       else if (line.indexOf('BATT,') === 0) {
         const parts = line.split(',');
@@ -1677,274 +1412,6 @@ class DeviceCard {
     this.bumpCounter();
   }
 
-    captureClass(label, sec) {
-      if (!this.txChar) { this.log('Connect first.'); return; }
-      this.log(`Training capture: ${label} for ${sec}s...`);
-
-      this._capTs = [];
-      this._capPitch = [];
-      this._capActive = true;
-
-      this.sendLine('STREAM,ON');
-
-      setTimeout(() => {
-        this._capActive = false;
-        if (this._capTs.length) {
-          const t0 = this._capTs[0];
-          const nts = this._capTs.map(t => t - t0);
-          this.trainRaw[label].push({ ts: nts, pitch: this._capPitch.slice() });
-          this.log(`Captured ${label}: ${nts.length} samples.`);
-        } else {
-          this.log(`No samples captured for ${label}.`);
-        }
-      }, Math.max(1, sec * 1000));
-    }
-
-    _featuresFromPitch(ts, p) {
-      ts = Float64Array.from(ts);
-      p  = Float64Array.from(p);
-      const n = p.length; if (n < 4) return null;
-
-      // dt, dv
-      const dt = new Float64Array(n - 1);
-      const dv = new Float64Array(n - 1);
-      for (let i = 1; i < n; i++) {
-        const d = ts[i] - ts[i - 1];
-        dt[i - 1] = d > 0 ? d : 1e-3;
-        dv[i - 1] = p[i] - p[i - 1];
-      }
-
-      // vel = |dv|/dt
-      const vel = new Float64Array(n - 1);
-      for (let i = 0; i < n - 1; i++) vel[i] = Math.abs(dv[i]) / dt[i];
-
-      // jerk = |dvel|/dtv
-      let jerk;
-      if (vel.length >= 2) {
-        const dtv = new Float64Array(vel.length - 1);
-        jerk = new Float64Array(vel.length - 1);
-        for (let i = 1; i < vel.length; i++) {
-          const d = dt[i]; // aligns with Python version (dt[1:])
-          dtv[i - 1] = d > 0 ? d : 1e-3;
-          jerk[i - 1] = Math.abs(vel[i] - vel[i - 1]) / dtv[i - 1];
-        }
-      } else {
-        jerk = new Float64Array([0]);
-      }
-
-      // zcr on signed delta pitch
-      let zc = 0;
-      for (let i = 2; i < n; i++) {
-        const a = p[i] - p[i - 1], b = p[i - 1] - p[i - 2];
-        if (a === 0 || b === 0) continue;
-        if ((a > 0 && b < 0) || (a < 0 && b > 0)) zc++;
-      }
-      const dur = Math.max(1e-3, ts[n - 1] - ts[0]);
-
-      const vel_rms  = Math.sqrt(vel.reduce((s, x) => s + x * x, 0) / Math.max(1, vel.length));
-      const meanP    = p.reduce((s, x) => s + x, 0) / n;
-      const pitch_sd = Math.sqrt(p.reduce((s, x) => s + (x - meanP) * (x - meanP), 0) / n);
-      const jerk_rms = Math.sqrt(jerk.reduce((s, x) => s + x * x, 0) / Math.max(1, jerk.length));
-      const zcr      = zc / dur;
-
-      return [vel_rms, pitch_sd, jerk_rms, zcr];
-    }
-
-    _makeWindows(ts, p, win_s, hop_s) {
-      const out = [];
-      const t0 = ts[0], tEnd = ts[ts.length - 1];
-      for (let cur = t0; cur + win_s <= tEnd + 1e-9; cur += hop_s) {
-        const idx = [];
-        for (let i = 0; i < ts.length; i++) {
-          if (ts[i] >= cur && ts[i] <= cur + win_s) idx.push(i);
-        }
-        if (idx.length >= 4) {
-          const selT = idx.map(i => ts[i] - cur);
-          const selP = idx.map(i => p[i]);
-          const f = this._featuresFromPitch(selT, selP);
-          if (f) out.push(f);
-        }
-      }
-      return out;
-    }
-
-    classifyTick(){
-      if (!this.trainedModel) return;
-
-      const n = this.pitchBuf.length;
-      if (n < 6) return;
-
-      const t = this.timeBuf, p = this.pitchBuf;
-      const tEnd = t[n-1], tStart = tEnd - this.WIN_SEC;
-
-      // collect last WIN_SEC seconds
-      const idx = [];
-      for (let i = n-1; i >= 0; i--){
-        if (t[i] >= tStart) idx.push(i); else break;
-      }
-      if (idx.length < 4) return;
-
-      const sel = idx.reverse();
-      const ts = sel.map(i => t[i] - tStart);
-      const ps = sel.map(i => p[i]);
-
-      const f = this._featuresFromPitch(ts, ps);
-      if (!f) return;
-
-      // normalize using training stats
-      const x = f.map((v,i)=> (v - this.normMean[i]) / (this.normStd[i] || 1e-8));
-      const xt = tf.tensor2d([x]);               // [1,4]
-      const y  = this.trainedModel.predict(xt);  // [1,numOut]
-      const probs = y.arraySync()[0];            // length === this.CLASSES.length
-      xt.dispose(); y.dispose();
-
-      const numOut = this.CLASSES.length;
-
-      // --- EMA smooth the probabilities ---
-      for (let i = 0; i < numOut; i++){
-        const prev = (this.probEMA[i] == null) ? probs[i] : this.probEMA[i];
-        this.probEMA[i] = prev + this.alphaEMA * (probs[i] - prev);
-      }
-
-      // --- Hysteresis + dwell-time decision ---
-      const now = performance.now();
-      const curIdx = (this.lastLabel == null) ? -1 : this.lastLabel;
-
-      // find current best by smoothed probs
-      let bestIdx = 0, bestVal = this.probEMA[0];
-      for (let i = 1; i < numOut; i++){
-        if (this.probEMA[i] > bestVal){ bestVal = this.probEMA[i]; bestIdx = i; }
-      }
-
-      let chosen = curIdx;
-      if (curIdx === -1) {
-        chosen = bestIdx;
-        this.lastChangeMs = now;
-      } else if (bestIdx !== curIdx) {
-        const gap = this.probEMA[bestIdx] - this.probEMA[curIdx];
-        const longEnough = (now - this.lastChangeMs) >= this.dwellMs;
-        if (gap >= this.switchMargin && longEnough){
-          chosen = bestIdx;
-          this.lastChangeMs = now;
-        }
-      }
-
-      // --- Update UI using smoothed probs ---
-      const dist = {};
-      for (let i = 0; i < numOut; i++) dist[this.CLASSES[i]] = this.probEMA[i];
-      this.setActivityDist(dist);
-
-      const conf = Math.max(0, Math.min(1, this.probEMA[chosen] ?? bestVal ?? 0));
-      const label = this.CLASSES[chosen] || '—';
-      this.setActivity(label, conf);
-
-      this.lastLabel = chosen;
-    }
-
-    async trainAndDeploy () {
-    const CLASSES = this.CLASSES;        // e.g., ['Still','Walking','Running','Stairs']
-    const featDim = 4;                   // from _featuresFromPitch()
-    const numOut  = CLASSES.length;
-    const X = [];
-    const y = [];
-
-    // Build dataset from all captured segments
-    for (let c = 0; c < CLASSES.length; c++) {
-      const label = CLASSES[c];
-      const segs = this.trainRaw[label] || [];
-      for (const seg of segs) {
-        const feats = this._makeWindows(seg.ts, seg.pitch, this.WIN_SEC, this.HOP_SEC);
-        for (const f of feats) {
-          if (Array.isArray(f) && f.length === featDim) {
-            X.push(f);
-            y.push(c);
-          }
-        }
-      }
-    }
-
-    if (X.length === 0) {
-      this.log('No data to train. Capture at least one window.');
-      return;
-    }
-
-    // Need at least TWO distinct classes to train
-    const present = new Set(y);
-    if (present.size < 2) {
-      this.log('Need ≥2 classes with data (e.g., Still + Walking).');
-      return;
-    }
-
-    // ===== Build tensors =====
-    const Xmat = tf.tensor2d(X, [X.length, featDim], 'float32'); // [N, 4]
-    const mean = Xmat.mean(0);
-    const std  = tf.moments(Xmat, 0).variance.sqrt().add(1e-8);
-    const Xn   = Xmat.sub(mean).div(std);
-    const yvec = tf.tensor1d(y, 'float32'); // sparse labels (floored intern.)
-
-    // ===== Model =====
-    const model = tf.sequential();
-    model.add(tf.layers.dense({ units: 8, inputShape: [featDim], activation: 'relu', useBias: true }));
-    model.add(tf.layers.dense({ units: numOut, activation: 'softmax', useBias: true }));
-    model.compile({ optimizer: tf.train.adam(0.02), loss: 'sparseCategoricalCrossentropy' });
-
-    this.log(`Training MLP on ${X.length} windows…`);
-    await model.fit(Xn, yvec, { epochs: 70, batchSize: 32, shuffle: true, verbose: 0 });
-
-    // ===== Extract weights & normalization =====
-    const tensors = model.getWeights();                 // [W1,b1,W2,b2]
-    const [W1, b1, W2, b2] = tensors.map(t => t.arraySync());
-    const meanArr = await mean.array();
-    const stdArr  = await std.array();
-
-    // Flatten (row-major) then transpose to firmware layout
-    const flatW1 = [].concat(...W1);   // (featDim x 8)
-    const flatW2 = [].concat(...W2);   // (8 x numOut)
-    function transposeFlat(src, rows, cols) {
-      const out = new Array(rows * cols); let k = 0;
-      for (let c = 0; c < cols; c++) for (let r = 0; r < rows; r++) out[k++] = src[r * cols + c];
-      return out;
-    }
-    const D1_W = transposeFlat(flatW1, featDim, 8);   // -> (8 x featDim)
-    const D2_W = transposeFlat(flatW2, 8, numOut);    // -> (numOut x 8)
-
-    const pkg = {
-      ver: 1,
-      classes: CLASSES.slice(),
-      mean: meanArr, std: stdArr,
-      d1_w: D1_W, d1_b: b1,
-      d2_w: D2_W, d2_b: b2
-    };
-
-    await this.pushModelToDevice(pkg);
-    this.sendLine('ACLASS,ON');
-    this.log('Deployed model. Device is now classifying. (Browser-side smoothing active)');
-
-    // Keep model locally for browser-side inference + smoothing
-    this.trainedModel = model;
-    this.normMean = meanArr;
-    this.normStd  = stdArr;
-
-    this.probEMA = new Array(numOut).fill(0);
-    this.lastLabel = null;
-    this.lastChangeMs = performance.now();
-    if (this.clsTimer) clearInterval(this.clsTimer);
-    this.clsTimer = setInterval(() => this.classifyTick(), 200);
-
-    // Cleanup tensors
-    Xmat.dispose(); Xn.dispose(); yvec.dispose(); mean.dispose(); std.dispose();
-  }
-    
-    async pushModelToDevice(obj) {
-      const js = JSON.stringify(obj);
-      this.sendLine('MLBEGIN');
-      const CH = 180; // conservative BLE line size
-      for (let i = 0; i < js.length; i += CH) {
-        const chunk = js.slice(i, i + CH);
-        await this.sendLine('ML,' + chunk);
-      }
-      this.sendLine('MLEND');
-    }
 
   /* === Random FM methods === */
   setFMPeriodFromInput(){
@@ -2253,55 +1720,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
   }catch(_e){}
 
-  // Activity preset buttons
-  try{
-    const presetState = { RELAX:false, SLEEP:false, HYPE:false };
-    const freqMap = { RELAX:20, SLEEP:10, HYPE:50 };
-    const getDuty = ()=>{
-      try{ return Math.max(1, Math.min(100, parseInt(_cards?.[0]?.inDuty?.value || '50',10))); }catch(_e){ return 50; }
-    };
-    const clearPresetUI = ()=>{
-      for (const k of Object.keys(presetState)) presetState[k] = false;
-      document.querySelectorAll('.act-btn').forEach(b=> b.classList.remove('active'));
-    };
-    let presetBusy = false;
-    document.querySelectorAll('.act-btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const mode = (btn.getAttribute('data-mode')||'').toUpperCase();
-        if (!mode || !freqMap[mode]) return;
-        const wasActive = !!presetState[mode];
-        if (wasActive){
-          // toggle off: just stop PWM once
-          presetState[mode] = false;
-          btn.classList.remove('active');
-          if (_cards && _cards[0]){ try{ _cards[0].btnStopPWM?.onclick(); }catch(_e){} }
-          return;
-        }
-        if (presetBusy) return; // prevent spamming BLE writes
-        presetBusy = true;
-        // Activate requested mode; turn others off visually
-        clearPresetUI();
-        const duty = getDuty();
-        const startPreset = ()=>{
-          if (_cards && _cards[0]){
-            try{ _cards[0].inFreq.value = String(freqMap[mode]); }catch(_e){}
-            try{ _cards[0].inDuty.value = String(duty); }catch(_e){}
-            try{ _cards[0].btnStartPWM?.onclick(); }
-            catch(_e){ _cards[0].sendLine('PWM,'+freqMap[mode]+','+duty); }
-            presetState[mode] = true;
-            btn.classList.add('active');
-          }
-          presetBusy = false;
-        };
-        // If FM is running, stop it and give device a brief moment
-        try{
-          const card = _cards?.[0];
-          if (card && card.fmEnabled){ card.stopFM(); setTimeout(startPreset, 180); }
-          else startPreset();
-        }catch(_e){ startPreset(); }
-      });
-    });
-  }catch(_e){}
   // Sidebar buttons actions
   try{
     const byId = (id)=> document.getElementById(id);
@@ -2312,22 +1730,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
       for (const c of _cards){ if (c.logEl) c.logEl.textContent = ''; }
     });
     byId('sbDisconnect')?.addEventListener('click', ()=>{ for (const c of _cards) c.disconnect(); });
-  }catch(_e){}
-  // Initialize global activity rows immediately so bars show from first ACT
-  try{
-    const bars = document.getElementById('globActBars');
-    if (bars){
-      for (const k of GLOBAL_CLASSES){
-        const row = document.createElement('div');
-        row.className = 'activity-row';
-        row.setAttribute('data-k', k);
-        row.innerHTML = `<div class="name"></div><div class="wrap"><div class="bar"></div></div><div class="pct">0%</div>`;
-        row.querySelector('.name').textContent = k;
-        const color = (ACT_COLORS && ACT_COLORS[k]) || '#3b82f6';
-        row.querySelector('.bar').style.background = color;
-        bars.appendChild(row);
-      }
-    }
   }catch(_e){}
   // Keyboard shortcuts
   try{
